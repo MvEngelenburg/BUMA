@@ -71,6 +71,7 @@ pop2 = pop.reindex(list(range(1970,end_year + 1,1))).interpolate()
 # Remove 1st year, to ensure same Table size as floorspace data (from 1971)
 pop2 = pop2.iloc[1:]
 rurpop2 = rurpop2.iloc[1:]
+sva_pc = sva_pc.iloc[1:]
 
 #pre-calculate urban population
 urbpop = 1 - rurpop2                                                           # urban population is 1 - the fraction of people living in rural areas (rurpop)
@@ -78,6 +79,10 @@ urbpop = 1 - rurpop2                                                           #
 # Restructure the tables to regions as columns; for floorspace
 floorspace_rur = floorspace.pivot(index="t", columns="Region", values="Rural")
 floorspace_urb = floorspace.pivot(index="t", columns="Region", values="Urban")
+
+#Alignment on end year
+floorspace_rur = pd.DataFrame(floorspace_rur2, index=range(1971,end_year + 1), columns=range(1,27))
+floorspace_urb = pd.DataFrame(floorspace_urb2, index=range(1971,end_year + 1), columns=range(1,27))
 
 # Restructuring for square meters (m2/cap)
 avg_m2_cap_urb = avg_m2_cap.loc[avg_m2_cap['Area'] == 'Urban'].drop('Area', 1).T  # Remove area column & Transpose
